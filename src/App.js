@@ -16,7 +16,7 @@ function App() {
               <Route exact path="/">
                 <Homepage/>
               </Route>
-              <Route exact path="exchanges">
+              <Route exact path="/exchanges">
                 <Exchanges/>
               </Route>
               <Route exact path="/cryptocurrencies">
@@ -25,15 +25,23 @@ function App() {
               <Route exact path="/crypto/:coinId">
                 <CryptoDetails/>
               </Route>
-              <Route exact path="news">
+              <Route exact path="/news">
                 <News/>
               </Route>
             </Switch>
           </div>
         </Layout>
+        <div className='footer'>
+        <Typography.Title level={4} style={{ color: 'white', textAlign: 'center' }}>Copyright © 2022
+          Cryptocase <br/>
+          All right reserved
+        </Typography.Title>
+        <Space>
+          <Link to="/">Home</Link>
+          <Link to="/exchanges">Exchanges</Link>
+          <Link to="/news">News</Link>
+        </Space>
       </div>
-      <div className='footer'>
-
       </div>
     </div>
   );
