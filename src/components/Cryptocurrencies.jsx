@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import millify from 'millify';
 import {Link} from 'react-router-dom';
 import {Card,Row,Col,Input} from 'antd';
@@ -9,17 +9,28 @@ import {useGetCryptosQuery} from '../services/cryptoApi';
 const Cryptocurrencies = ({simplified}) => {
 
   const count = simplified ? 10 : 100;
-  const{data: cryptoList,isFetching} = useGetCryptosQuery(count);
-  const [cryptos, setCryptos] = useState(cryptoList?.data?.coins);
-  const [state,setSearchTerm] = useState('');
+  const{data: cryptosList,isFetching} = useGetCryptosQuery(count);
+  const [cryptos, setCryptos] = useState([]);// empty array is is start right here beacuase this is happening in start as well, useEffect is combination of component did mount and component did update--
+  const [searchTerm,setSearchTerm] = useState('');// useEffect WE ARE CHANGING THE SEARCH TERM.
+  
+  useEffect(() => {
+    // setCryptos(cryptoList?.data?.coins); 
+    //-- remove this line beacuase add setCryptos line // setting there
+    const filteredData = cryptosList?.data?.coins.filter((coin) => coin.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    setCryptos(filteredData);
+  },[cryptosList,searchTerm]); //dependencies array , that means this function is executed when whenever one of the value chnges
+
   if(isFetching) return 'Loading...';
 
-
+//if not equal to simplified then render this , simplified true on the homepage but if its not simplified that is not gonna be not hompage
+//this is going to make disappear on homepage
   return (
     <>
-    <div className="search-crypto">
-      <Input placeholder='Search Cryptocurrencies' onChange={(e) => setSearchTerm(e.target.value)  } />
-    </div>
+     {!simplified && (
+      <div className="search-crypto">
+        <Input placeholder='Search Cryptocurrencies' onChange={(e) => setSearchTerm(e.target.value)} />
+      </div>
+    )} 
       <Row gutter={[32,32]} className="crypto-card-container">
         {cryptos?.map((currency) => (
           <Col xs={24} sm={12} lg={6} className="crypto-card" key={currency.id} >
