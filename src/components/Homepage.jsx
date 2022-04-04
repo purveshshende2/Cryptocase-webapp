@@ -9,7 +9,7 @@ const {Title} = Typography; //just to make data little bit simpler we destructur
 
 function Homepage() {
 
-const {data, isFetching} = useGetCryptosQuery();
+const {data, isFetching} = useGetCryptosQuery(10);
 console.log(data);
 
 const globalStats = data?.data?.stats;
