@@ -44,10 +44,10 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+### Dependencies (install with one command)
+`npm install antd @ant-design/icons react-redux @reduxjs/toolkit axios chart.js html-react-parser millify moment react-chartjs-2`
 
-##npm install antd @ant-design/icons react-redux @reduxjs/toolkit axios chart.js html-react-parser millify moment react-chartjs-2
-
-##npm install react-router-dom
+`npm install react-router-dom`
 
 ### ICONS
 Icons by : [Icons 8](https://icons8.com/)
