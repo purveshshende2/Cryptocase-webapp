@@ -1,58 +1,64 @@
-import React, { useState,useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import millify from 'millify';
-import {Link} from 'react-router-dom';
-import {Card,Row,Col,Input} from 'antd';
+import { Link } from 'react-router-dom';
+import { Card, Row, Col, Input } from 'antd';
 
-import {useGetCryptosQuery} from '../services/cryptoApi';
+import { useGetCryptosQuery } from '../services/cryptoApi';
+import Loader from './Loader';
 
-
-const Cryptocurrencies = ({simplified}) => {
-
+const Cryptocurrencies = ({ simplified }) => {
   const count = simplified ? 10 : 100;
-  const{data: cryptosList,isFetching} = useGetCryptosQuery(count);
-  const [cryptos, setCryptos] = useState([]);// empty array is is start right here beacuase this is happening in start as well, useEffect is combination of component did mount and component did update--
-  const [searchTerm,setSearchTerm] = useState('');// useEffect WE ARE CHANGING THE SEARCH TERM.
-  
+  const { data: cryptosList, isFetching } = useGetCryptosQuery(count);
+  const [cryptos, setCryptos] = useState();
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => {
-    // setCryptos(cryptoList?.data?.coins); 
-    //-- remove this line beacuase add setCryptos line // setting there
-    const filteredData = cryptosList?.data?.coins.filter((coin) => coin.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    setCryptos(cryptosList?.data?.coins);
+
+    const filteredData = cryptosList?.data?.coins.filter((item) => item.name.toLowerCase().includes(searchTerm));
+
     setCryptos(filteredData);
-  },[cryptosList,searchTerm]); //dependencies array , that means this function is executed when whenever one of the value chnges
+  }, [cryptosList, searchTerm]);
 
-  if(isFetching) return 'Loading...';
+  if (isFetching) return <Loader />;
 
-//if not equal to simplified then render this , simplified true on the homepage but if its not simplified that is not gonna be not hompage
-//this is going to make disappear on homepage
   return (
     <>
-     {!simplified && (
-      <div className="search-crypto">
-        <Input placeholder='Search Cryptocurrencies' onChange={(e) => setSearchTerm(e.target.value)} />
-      </div>
-    )} 
-      <Row gutter={[32,32]} className="crypto-card-container">
+      {!simplified && (
+        <div className="search-crypto">
+          <Input
+            placeholder="Search Cryptocurrency"
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          />
+        </div>
+      )}
+      <Row gutter={[32, 32]} className="crypto-card-container">
         {cryptos?.map((currency) => (
-          <Col xs={24} sm={12} lg={6} className="crypto-card" key={currency.id} >
-            <Link to={`/crypto/${currency.id}`} >
-             <Card title={`${currency.rank}. ${currency.name}`} extra={<img className='crypto-image' src={currency.iconUrl} alt="crypto" />}
+          <Col
+            xs={24}
+            sm={12}
+            lg={6}
+            className="crypto-card"
+            key={currency.uuid}
+          >
+
+            {/* Note: Change currency.id to currency.uuid  */}
+            <Link key={currency.uuid} to={`/crypto/${currency.uuid}`}>
+              <Card
+                title={`${currency.rank}. ${currency.name}`}
+                extra={<img className="crypto-image" src={currency.iconUrl} alt='crypto'/>}
                 hoverable
               >
-
-                <p> Price : {millify(currency.price)} </p>
-                <p> Market Cap : {millify(currency.marketCap)} </p>
-                <p> Daily Change : {millify(currency.change)} </p>
-             </Card>
+                <p>Price: {millify(currency.price)}</p>
+                <p>Market Cap: {millify(currency.marketCap)}</p>
+                <p>Daily Change: {currency.change}%</p>
+              </Card>
             </Link>
           </Col>
         ))}
       </Row>
     </>
-  )
-  //here , Link that entire card is going to be link
-  //Remeber we looping over something so we need a id.
-  //xs- how its gonna be in extra small devices
-  //gutter - spaces in between items in antd
-}//empty brackets are react fragments
+  );
+};
 
-export default Cryptocurrencies
+export default Cryptocurrencies;
