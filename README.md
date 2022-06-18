@@ -10,7 +10,7 @@ Cryptocase is a React Application that provides a platform for know Cryptocurren
 
 ## Demo
 - Live
-    - [Crypto Outlet](https://cryptocase.netlify.app)
+    - [Cryptocase](https://cryptocase.netlify.app)
  
 **Note:** This is an multi-page application & available on server. That's why I didn't provide images demo for this project.
 
